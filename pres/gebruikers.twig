@@ -1,0 +1,102 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Arne's Pizzashop</title>
+    </head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="//cdn.datatables.net/plug-ins/725b2a2115b/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" type="text/css"/>
+    <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="//cdn.datatables.net/plug-ins/725b2a2115b/integration/bootstrap/3/dataTables.bootstrap.js" type="text/javascript"></script>
+    <body>
+
+        {% include 'navigation.twig' %}
+        <div class="jumbotron">
+            <div class="container">
+                <br>
+                <br>
+                <h1>Arne's Pizzashop</h1>
+                <p><span class='label label-default'>Online Pizza Bestellen!</span></p>
+            </div>
+        </div>
+        <div class="container">
+            <h2>Gebruikers</h2>
+            <div class="row">
+
+            </div>
+            <table id="gebruikers" class='table table-hover'>
+                <thead>
+                    <tr>
+                        <th>Gebruikersnaam</th>
+                        <th>Naam</th>
+
+                        <th>Adres</th>
+                        <th>Postcode</th>
+                        <th>Gemeente</th>
+                        <th>Telefoonnummer</th>
+                        <th>E-mail adres</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for gebruiker in gebruikersLijst %}
+
+                        <tr>
+                            <td>
+                                <a href='bestellingenPerGebruiker.php?id={{gebruiker.id}}'>
+                                    {{gebruiker.gebruikersnaam}}
+                                </a>
+                            </td>
+                            <td>{{gebruiker.naam}} {{gebruiker.voornaam}}</td>
+
+
+                            <td>{{gebruiker.adres}}</td>
+                            <td>{{gebruiker.postcode}}</td>
+                            <td>{{gebruiker.gemeente}}</td>
+                            <td>{{gebruiker.telefoonnummer}}</td>
+                            <td>{{gebruiker.emailadres}}</td>
+                            <td>
+                                <form id="{{gebruiker.id}}" action="updateGebruiker.php" method="post">
+                                    <input type="hidden" name="gebruikersId" value="{{gebruiker.id}}">
+                                    <select class="form-control" name="status" onchange="change({{gebruiker.id}})">
+                                        {% if gebruiker.passief == 0 %}
+                                            <option value="0" selected>Actief</option>
+                                            <option value="1">Passief</option>
+                                        {% else %}
+                                            <option value="0" >Actief</option>
+                                            <option value="1" selected>Passief</option>
+                                        {% endif %}
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="container">
+            <footer>
+                <hr>
+                <p>© Arne Slabbinck 2014</p>
+            </footer>
+        </div>
+        <script>
+            function change($id) {
+                document.getElementById($id).submit();
+            }
+            $(document).ready(function() {
+                $('#gebruikers').dataTable();
+                $('#gebruikers').removeClass('display').addClass('table table-bordered table-striped');
+            {#document.getElementById("gebruikers_length").style.display = "none";
+            $('input[type=search]').addClass('form-control');#}
+
+
+                });
+
+        </script>
+    </body>
+</html>

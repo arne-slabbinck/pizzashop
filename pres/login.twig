@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Login</title>
+    </head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <body>
+
+        {% include 'navigation.twig' %}
+        <div class="jumbotron">
+            <div class="container">
+                <br>
+                <br>
+                <h1>Arne's Pizzashop</h1>
+                <p><span class='label label-default'>Online Pizza Bestellen!</span></p>
+            </div>
+        </div>
+        <div class="container">
+            {% if gebruiker == "" %}
+                <div class="col-sm-6">
+                    <form class="form-horizontal" role="form" method="post" action="login.php">
+
+                        <legend>Bestaande Klant</legend>
+
+                        <div class="form-group">
+                            <label for="inputGebruikersnaam" class="col-sm-4 control-label">Gebruikersnaam:</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="inputGebruikersnaam" name="inputGebruikersnaam" placeholder="Gebruikersnaam" autofocus>
+                            </div> 
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputWw1" class="col-sm-4 control-label">Wachtwoord:</label>
+                            <div class="col-sm-6">
+                                <input type="password" class="form-control" id="inputWachtwoord" name="inputWachtwoord" placeholder="Wachtwoord">
+                            </div> 
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-6">
+                                <input type="submit" class="form-control btn btn-default" id="submit" value="Inloggen">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <form class="form-horizontal" role="form" method="post" action="registreer.php">
+
+                        <legend>Nieuw bij Arne's Pizzashop?</legend>
+
+                        <div class="form-group">
+                            <br><br>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-6">
+                                <a href="registreer.php" class="form-control btn btn-default">Registreer</a>
+                            </div>
+                            <div class="col-sm-3"></div>
+                        </div>
+
+                    </form>
+                </div>
+            {% else %}
+                <p class="lead">Welkom {{gebruiker.voornaam}} {{gebruiker.naam}}!</p>
+            {% endif %}
+        </div>
+        <div class="container">
+
+            <footer>
+                <hr>
+                <p>© Arne Slabbinck 2014</p>
+            </footer>
+        </div>
+
+    </div>
+</body>
+</html>

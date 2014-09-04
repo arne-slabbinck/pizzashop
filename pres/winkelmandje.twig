@@ -1,0 +1,172 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Arne's Pizzashop</title>
+    </head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <body>
+
+        {% include 'navigation.twig' %}
+        <div class="jumbotron">
+            <div class="container">
+                <br>
+                <br>
+
+                <h1>Arne's Pizzashop</h1>
+                <p><span class='label label-default'>Online Pizza Bestellen!</span></p>
+            </div>
+        </div>
+        <div class="container">
+            <div class='row'>
+                <div class='col-md-8'>
+                    <h2>Winkelmandje</h2>
+                </div>
+                <div class='text-right col-md-4'>
+                    <br>
+                    {% if winkelmandItems|length > 0 %}
+                        <a href="winkelmandjeLeegmaken.php" class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove"></span> Winkelmandje Leegmaken
+                        </a>
+                    {% endif %}
+                    <div class='col-sm-5'></div>
+                </div>
+            </div>
+            <!-- Tabel aanmaken voor het winkelmandje -->
+
+            <table class="table table-hover">
+                <tr class='info'>
+                    <th>Product</th>
+                    <th>Extra's</th>
+                    <th>Prijs</th>
+
+                    <th class='text-center'>Aantal</th>
+
+                    <th>Totaal</th>
+                    <th>Verwijder</th>
+                </tr>
+                {% set totaal = 0 %}
+
+                <!-- Door winkelmanditems lussen -->
+
+                {% if winkelmandItems|length == 0 %}
+                    <tr>
+                        <td>U heeft geen artikelen in uw Winkelmandje</td>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
+                    </tr>
+                {% endif %}
+
+                {% for winkelmandItem in winkelmandItems %}
+                    <tr>
+                        <td>{{winkelmandItem.product.naam}}</td>
+
+                        <td>
+                            <p>&NonBreakingSpace;</p>
+                            {% for extra in winkelmandItem.extras %}
+                                <p>{{extra.naam}}</p>
+                            {% endfor %}
+                        </td>
+                        <td><p>&euro; {{winkelmandItem.product.prijs}}<p>
+                                {% for extra in winkelmandItem.extras %}
+                                <p>&euro; {{extra.prijs}}</p>
+                            {% endfor %}
+
+                        </td>
+                        <td>
+                            <div class='row'>
+                                <div class='col-md-3'>x</div>
+
+                                <div class='col-md-7'>
+
+                                    <!-- Form aanmaken voor het aantal, zodat dit via een on change() event
+                                         kan aangepast worden en worden gesubmit om het totaal aan te passen -->
+
+                                    <form id="{{winkelmandItem.product.id}}" action='updateWinkelmandje.php' method='post'>
+                                        <input type="hidden" name="winkelmandId" value="{{winkelmandItem.id}}">
+                                        <select class='form-control' name='aantal' onchange='change({{winkelmandItem.product.id}})'>
+                                            {% for i in 1..10 %}
+
+                                                <!-- Lus voor select dropdown op te vullen
+                                                     Als het aantal gelijk is aan het aantal in het winkelmandje,
+                                                     Die option selected maken -->
+
+                                                {% if winkelmandItem.aantal == i %}
+                                                    <option selected value='{{i}}'>{{i}}</option>
+                                                {% else %}
+                                                    <option value='{{i}}'>{{i}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                </div>
+
+
+                            </div>
+
+                        </td>
+
+                        <td>{#{% set subtotaal = winkelmandItem.product.prijs * winkelmandItem.aantal %}#}
+                            &euro; {#{{ subtotaal|number_format(2) }}#} {{winkelmandItem.subtotaal}}
+                            {% set totaal = totaal + winkelmandItem.subtotaal %}
+                        </td>
+                        <td>
+                            <form action="verwijderUitWinkelmandje.php" method="post">
+                                <input type="hidden" name="winkelmandId" value="{{winkelmandItem.id}}">
+                                <button type="submit" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+
+                {% endfor %}
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Totaal:</th>
+                    <th class='lead'>&euro; {{ totaal|number_format(2) }}</th>
+
+
+                    <th>
+                        {% if winkelmandItems|length > 0 %}
+                            <a href="checkout.php" class="btn btn-success">
+                                <span class="glyphicon glyphicon-play"></span> Checkout
+                            </a>
+                        {% endif %}
+                    </th>
+                </tr>
+            </table>
+
+        </div>
+
+        <div class="container">
+            <footer>
+                <hr>
+                <p>© Arne Slabbinck 2014</p>
+            </footer>
+        </div>
+
+
+    </body>
+    <script>
+        function change($id) {
+            //document.getElementById("frmAantal").submit();
+            document.getElementById($id).submit();
+        }
+    </script>
+</html>

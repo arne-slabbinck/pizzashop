@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Arne's Pizzashop</title>
+    </head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <body>
+        {% include 'navigation.twig' %}
+        <div class="jumbotron">
+            <div class="container">
+                <br>
+                <br>
+                <h1>Arne's Pizzashop</h1>
+                <p><span class='label label-default'>Online Pizza Bestellen!</span></p>
+            </div>
+        </div>
+        <div class="container">
+            <h2>Pizzas</h2>
+            {% for pizza in pizzaLijst %}
+                <div class="row pizzaRow btn-default">
+                    <div class="col-md-3">
+                        <img src="{{pizza.imgpath}}" class="img-thumbnail">
+                    </div>
+                    <div class="col-md-4">
+                        <h2>{{pizza.naam}}</h2>
+                        {% if gebruiker.beheerder == 1 %}
+                            <form action="bewerkProduct.php?id="{{pizza.id}} method="get">
+                                <input type="hidden" name="productId" value="{{pizza.id}}">
+                                <button type="submit" class="btn btn-info">
+                                    <span class="glyphicon glyphicon-cog"></span> Aanpassen
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-2">
+                        <h2>&euro; {{pizza.prijs}}</h2>
+                        <p>(zonder extra's)</p>
+                    </div>
+                    <div class='col-md-2'>
+                        <a class="btn btn-info btn-lg btnBestel" role="button" href="product.php?id={{pizza.id}}">
+                            Bestel</a>
+                    </div>
+                </div>                
+            {% endfor %}
+        </div>
+        <div class="container">
+            <footer>
+                <hr>
+                <p>© Arne Slabbinck 2014</p>
+            </footer>
+        </div>
+    </body>
+</html>

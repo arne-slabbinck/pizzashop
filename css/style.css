@@ -1,0 +1,58 @@
+
+
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+html {
+    overflow: -moz-scrollbars-vertical;
+    overflow: scroll;
+}
+
+tr, td {
+    padding:5px;
+}
+
+.pizzas{
+    float:left;
+    background-color: #ddd;
+}
+
+.winkelmandje {
+    margin-left:200px;
+    float:left;
+    background-color:#eee; 
+}
+
+footer {
+    text-align: center;
+}
+
+.prijsgroot {
+    font-size:55px;
+}
+
+.btnBestel {
+    margin-top: 25px;
+}
+
+.pizzaRow {
+    margin-bottom:20px;
+}
+
+.colAantal {
+    margin-top:16px;
+    margin-left:6px;
+}
+
+.selectAantal {
+    width:40%;
+}
+
+.dranken {
+    font-size:18px;
+}
+
+.drankRow {
+    padding-bottom: 10px;
+}

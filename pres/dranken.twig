@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Arne's Pizzashop</title>
+    </head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <body>
+
+        {% include 'navigation.twig' %}
+        <div class="jumbotron">
+            <div class="container">
+                <br>
+                <br>
+                <h1>Arne's Pizzashop</h1>
+                <p><span class='label label-default'>Online Pizza Bestellen!</span></p>
+            </div>
+        </div>
+        <div class="container">
+
+            <div class='row'>
+                <div class="col-md-2">
+                    <h2>Dranken</h2>
+                </div>
+                <div class="col-md-2">
+                    <h2>Inhoud</h2>
+                </div>
+                <div class="col-md-2">
+                    <h2>Prijs</h2>
+                </div>
+                <div class="col-md-2">
+                    <h2>Aantal</h2>
+                </div>
+                <div class="col-md-2">
+                    <h2 class="text-center">Bestel</h2>
+                </div>
+            </div>
+            {% for drank in drankenLijst %}
+                <div class='row btn-default drankRow'>
+                    <div class='col-md-2'>
+                        <h3 class="dranken">{{drank.naam}}</h3>
+                        {% if gebruiker.beheerder == 1 %}
+                            <form action="bewerkProduct.php?id="{{drank.id}} method="get">
+                                <input type="hidden" name="productId" value="{{drank.id}}">
+                                <button type="submit" class="btn btn-info">
+                                    <span class="glyphicon glyphicon-cog"></span> Aanpassen
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <div class='col-md-2'>
+                        <h3 class="dranken">{{drank.omschrijving}}</h3>
+                    </div>
+                    <div class="col-md-2">
+                        <h3 class="dranken">&euro; {{drank.prijs}}</h3>
+                    </div>
+                    <div class="col-md-2 colAantal">
+                        <select class='form-control selectAantal' name='aantal' form="{{drank.id}}">
+                            {% for i in 1..10 %}
+                                <!-- Lus voor select dropdown op te vullen-->
+                                <option value='{{i}}'>{{i}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <form action="voegToeAanWinkelmandje.php" method="post" id="{{drank.id}}">
+                            <input type="hidden" name="id" value="{{drank.id}}" >
+                            <button type="submit" class="btn btn-primary colAantal">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                In Winkelmandje</button>
+
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- Modal -->
+        <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             {% if toegevoegd == false %}
+                 aria-hidden="true"
+             {% else %}
+                 aria-hidden="false"
+             {% endif %}
+             >
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <h3 class="modal-title text-center">{{sDrank}} x {{sAantal}}</h3>
+                        <h4 class="modal-title text-center">Toegevoegd aan uw winkelmandje!</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button type="button" class="btn btn-success btn-lg" data-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>  
+
+        <div class="container">
+            <footer>
+                <hr>
+                <p>© Arne Slabbinck 2014</p>
+            </footer>
+        </div>
+    </body>
+    <script type="text/javascript">
+        $(window).load(function() {
+            if ({{toegevoegd}} == true) {
+                $('#myModal').modal('show');
+            }
+        });
+    </script>
+</html>

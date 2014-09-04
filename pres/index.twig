@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Arne's Pizzashop</title>
+        <style>
+            #map_canvas {
+                width: 500px;
+                height: 450px;
+            }
+        </style>
+        <script src="https://maps.googleapis.com/maps/api/js"></script>
+        <script>
+            function initialize() {
+                var map_canvas = document.getElementById('map_canvas');
+                var map_options = {
+                    center: new google.maps.LatLng(51.150834, 2.963613),
+                    zoom: 11,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var map = new google.maps.Map(map_canvas, map_options);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: new google.maps.LatLng(51.150834, 2.963613),
+                    title: 'Some location'
+                });
+                var circle = new google.maps.Circle({
+                    map: map,
+                    radius: 10000,
+                    fillColor: '#00cc33',
+                    strokeWeight: '1'
+                });
+                circle.bindTo('center', marker, 'position');
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+
+    </head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrapValidator.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/bootstrapValidator.min.js" type="text/javascript"></script>
+    <script src="js/be_NL.js" type="text/javascript"></script>
+    <body>
+
+        {% include 'navigation.twig' %}
+        <div class="jumbotron">
+            <div class="container">
+                <br>
+                <br>
+                <h1>Arne's Pizzashop</h1>
+                <p><span class='label label-default'>Online Pizza Bestellen!</span></p>
+            </div>
+        </div>
+        <div class="container">
+            <div class='row'>
+                <div class='col-md-6'></div>
+                <div class='col-md-6'><h1>Waar leveren we aan de deur?</h1></div>
+            </div>
+
+            <div class='row'>
+                <div class='col-md-6'>
+                    <div id='map_canvas'></div>
+
+                </div>
+                <div class='col-md-6'>
+                    <h1 class='text-center'></h1>
+                    <form action="index.php" id="frmPostcode" method="post">
+                        <div class='form-group'>
+                            <div class='col-md-7'>
+                                <input class="form-control input-lg" type="text" name="inputPostcode" id="inputPostcode" placeholder='Postcode'>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg"> Controlleer </button>
+
+                        </div>
+                    </form>
+
+                </div>
+                <div class='col-md-6'></div>
+                <div class='col-md-6'>
+                    {% if gemeentes == false %}
+                        <br>
+                        <div class='alert alert-danger'>
+                            <h2 class="text-danger">We leveren NIET in uw regio.</h2>
+                        </div>
+                    {% elseif gemeentes == "nognietingevoerd" %}
+                    {% else %}
+                        <br>
+                        <div class='alert alert-success'>
+                            <h2 class="text-danger">We leveren WEL in uw regio.</h2>
+                        </div>
+
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#frmPostcode').bootstrapValidator({
+                    // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+                    fields: {
+                        inputPostcode: {
+                            message: 'Dit is geen geldige postcode',
+                            validators: {
+                                notEmpty: {
+                                    message: 'Voer een postcode in'
+                                },
+                                regexp: {
+                                    regexp: /^[0-9]+$/,
+                                },
+                                stringLength: {
+                                    min: 4,
+                                    max: 4,
+                                    message: '',
+                                },
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

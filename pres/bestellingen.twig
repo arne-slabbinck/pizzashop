@@ -1,0 +1,234 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Arne's Pizzashop</title>
+    </head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <body>
+
+        {% include 'navigation.twig' %}
+        <div class="jumbotron">
+            <div class="container">
+                <br>
+                <br>
+                <h1>Arne's Pizzashop</h1>
+                <p><span class='label label-default'>Online Pizza Bestellen!</span></p>
+            </div>
+        </div>
+        <div class="container">
+            <!-- Nav tabs -->
+            <ul class="nav nav-pills" role="tablist">
+                <li class="active"><a href="#leveren" role="tab" data-toggle="tab"><h2>Nog te leveren bestellingen</h2></a></li>
+                <li><a href="#geleverd" role="tab" data-toggle="tab"><h2>Geleverde bestellingen</h2></a></li>
+                
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="leveren">
+                    {% for overzicht in overzichten %}
+                        {% if overzicht.status.id != 6 %}
+                            <div class="row panel panel-default well">
+                                <div class="col-md-3">
+                                    <h3>{{overzicht.gebruiker.voornaam}} {{overzicht.gebruiker.naam}}</h3>
+                                    <h4>{{overzicht.gebruiker.adres}}</h4>
+                                    <h4>{{overzicht.gebruiker.postcode}}</h4>
+                                    <h4>{{overzicht.gebruiker.gemeente}}</h4>
+                                    <form id='{{overzicht.bestellingsid}}' action='updateBestelling.php' method='post'>
+                                        <input type='hidden' name='bestellingId' value='{{overzicht.bestellingsid}}'>
+                                        <select class="form-control" name='statusId' onchange='change({{overzicht.bestellingsid}})'>
+                                            {% for status in statussen %}
+                                                {% if status.id == overzicht.status.id %}
+                                                    <option value="{{status.id}}" selected>{{status.omschrijving}}</option>
+                                                {% else %}
+                                                    <option value="{{status.id}}">{{status.omschrijving}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                    <br>
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-8">
+                                    <br>
+                                    <table class="table">
+
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Extras</th>
+                                            <th>Aantal</th>
+                                            <th>Prijs</th>
+
+
+                                            <th>Subtotaal</th>
+                                        </tr>
+
+                                        {% for winkelmanditem in overzicht.winkelmanditem %}
+
+                                            <tr>
+
+                                                <td>{{winkelmanditem.product.naam}}</td>
+                                                <td>
+                                                    {% for extra in winkelmanditem.extras %}
+                                                        <p>{{extra.naam}}</p>
+                                                    {% endfor %}
+                                                </td>
+                                                <td>{{winkelmanditem.aantal}} x</td>
+                                                <td>&euro; {{winkelmanditem.product.prijs}}</td> 
+
+
+                                                <td>&euro; {{winkelmanditem.subtotaal}}</td>
+                                            </tr>
+                                        {% endfor %}  
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Totaal:</th>
+                                            <th class="lead">&euro; {{overzicht.totaal}}</th>
+                                        </tr>
+
+                                    </table>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <form action="updateBestelling.php" method="post" class="">
+                                                <input type="hidden" name="bestellingId" value="{{overzicht.bestellingsid}}"/>
+                                                <input type="hidden" name="statusId" value="6"/>
+                                                <button type="submit" class="btn btn-success">
+                                                    <span class="glyphicon glyphicon-ok"></span> Verplaats naar Geleverd</button>
+                                            </form>
+
+                                        </div>
+                                        <div class="col-md-offset-8">
+                                            <form action="verwijderBestelling.php" method="post" class="">
+                                                <input type="hidden" name="bestellingId" value="{{overzicht.bestellingsid}}"/>
+                                                <button type="submit" class="btn btn-danger">
+                                                    <span class="glyphicon glyphicon-remove"></span> Verwijder Bestelling {{overzicht.bestellingsid}}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="tab-pane fade" id="geleverd">
+
+                    {% for overzicht in overzichten %}
+                        {% if overzicht.status.id == 6 %}
+                            <div class="row panel panel-default well">
+                                <div class="col-md-3">
+                                    <h3>{{overzicht.gebruiker.voornaam}} {{overzicht.gebruiker.naam}}</h3>
+                                    <h4>{{overzicht.gebruiker.adres}}</h4>
+                                    <h4>{{overzicht.gebruiker.postcode}}</h4>
+                                    <h4>{{overzicht.gebruiker.gemeente}}</h4>
+                                    <form id='{{overzicht.bestellingsid}}' action='updateBestelling.php' method='post'>
+                                        <input type='hidden' name='bestellingId' value='{{overzicht.bestellingsid}}'>
+                                        <select class="form-control" name='statusId' onchange='change({{overzicht.bestellingsid}})'>
+                                            {% for status in statussen %}
+                                                {% if status.id == overzicht.status.id %}
+                                                    <option value="{{status.id}}" selected>{{status.omschrijving}}</option>
+                                                {% else %}
+                                                    <option value="{{status.id}}">{{status.omschrijving}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                    <br>
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-8">
+                                    <br>
+                                    <table class="table">
+
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Extras</th>
+                                            <th>Aantal</th>
+                                            <th>Prijs</th>
+
+
+                                            <th>Subtotaal</th>
+                                        </tr>
+
+                                        {% for winkelmanditem in overzicht.winkelmanditem %}
+
+                                            <tr>
+
+                                                <td>{{winkelmanditem.product.naam}}</td>
+                                                <td>
+                                                    {% for extra in winkelmanditem.extras %}
+                                                        <p>{{extra.naam}}</p>
+                                                    {% endfor %}
+                                                </td>
+                                                <td>{{winkelmanditem.aantal}} x</td>
+                                                <td>&euro; {{winkelmanditem.product.prijs}}</td> 
+
+
+                                                <td>&euro; {{winkelmanditem.subtotaal}}</td>
+                                            </tr>
+                                        {% endfor %}  
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Totaal:</th>
+                                            <th class="lead">&euro; {{overzicht.totaal}}</th>
+                                        </tr>
+                                    </table>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                        </div>
+                                        <div class="col-md-offset-8">
+                                            <form action="verwijderBestelling.php" method="post" class="">
+                                                <input type="hidden" name="bestellingId" value="{{overzicht.bestellingsid}}"/>
+                                                <button type="submit" class="btn btn-danger">
+                                                    <span class="glyphicon glyphicon-remove"></span> Verwijder Bestelling {{overzicht.bestellingsid}}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <footer>
+                <hr>
+                <p>© Arne Slabbinck 2014</p>
+            </footer>
+        </div>
+
+    </body>
+    <script>
+        function change($id) {
+
+            document.getElementById($id).submit();
+        }
+    </script>
+</html>

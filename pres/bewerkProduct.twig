@@ -1,0 +1,108 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Arne's Pizzashop</title>
+    </head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <body>
+
+        {% include 'navigation.twig' %}
+        <div class="jumbotron">
+            <div class="container">
+                <br>
+                <br>
+                <h1>Arne's Pizzashop</h1>
+                <p><span class='label label-default'>Online Pizza Bestellen!</span></p>
+            </div>
+        </div>
+        <div class="container">
+
+            <h1>Bewerk Product</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-1">
+
+                    </div>
+                    <div class="col-md-6">
+                        <h3>{{product.naam}} <small>{{product.prijs}}</small></h3>  
+                    </div>
+
+                </div>
+                <form class="form-horizontal" role="form" method="post" action="bewerkproduct.php">
+                    <input type="hidden" name="inputId" value="{{product.id}}"/>
+                    <legend></legend>
+                    <div class="form-group">
+                        <label for="inputNaam" class="col-sm-2 control-label">Naam:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="inputNaam" value="{{product.naam}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputCategorieId" class="col-sm-2 control-label">Categorie:</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" name="inputCategorieId">
+                                {% for categorie in categorielijst %}
+                                    {% if product.categorieid == categorie.id %}
+                                        <option value="{{categorie.id}}" selected>{{categorie.omschrijving}}</option>
+                                    {% else %}
+                                        <option value="{{categorie.id}}">{{categorie.omschrijving}}</option>
+                                    {% endif %}
+                                {% endfor  %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputOmschrijving" class="col-sm-2 control-label">Omschrijving:</label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" rows="5" name="inputOmschrijving">{{product.omschrijving}}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputImgpath" class="col-sm-2 control-label">Image Path:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="inputImgpath" value="{{product.imgpath}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputKorting" class="col-sm-2 control-label">Korting:</label>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <span class="input-group-addon">&euro;</span>
+                                <input type="text" class="form-control" name="inputKorting" value="{{product.korting}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPrijs" class="col-sm-2 control-label">Prijs:</label>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <span class="input-group-addon">&euro;</span>
+                                <input type="text" class="form-control" name="inputPrijs" value="{{product.prijs}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-3">
+                            <input type="submit" class="form-control btn btn-default" id="submit" value="Bewerk Product">
+                        </div>
+                    </div>
+
+                </form>
+
+
+                <div class="col-md-2">
+                    <p class="thumb"><a class="btn btn-default btn-lg" role="button" href="pizzas.php">« Terug naar Producten</a></p>
+                </div>
+            </div>
+
+        </div>
+        <div class="container">
+            <footer>
+                <hr>
+                <p>© Arne Slabbinck 2014</p>
+            </footer>
+        </div>
+    </body>
+</html>
